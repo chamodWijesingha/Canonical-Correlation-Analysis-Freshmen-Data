@@ -1,0 +1,88 @@
+---
+title: "Project_2"
+author: "W.M.C.C.M.Wijesingha S/18/836"
+date: "5/30/2024"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(GGally)
+library(CCP)
+library(CCA)
+```
+```{r}
+FreshmenData <- read_csv("../Canonical_Correlation_Analysis/data/collegeFreshmenData.csv")
+colnames(FreshmenData) <-c("control","Concept","Motivation","Read","Write","Math","Science","Sex")
+summary(FreshmenData)
+```
+
+```{r}
+xtabs(~Sex, data = FreshmenData)
+```
+```{r}
+ggpairs(psychological)
+
+```
+
+```{r}
+ggpairs(academic)
+```
+```{r}
+matcor(psychological, academic)
+```
+
+```{r}
+canoncor1<- cc(psychological,academic)
+canoncor1$cor
+```
+```{r}
+canoncor1[3:4]
+```
+
+```{r}
+canoncor2 <- comput(psychological, academic, canoncor1)
+canoncor2[3:6]
+```
+```{r}
+library(CCP)
+rho <- canoncor1$cor
+## Define number of of observations
+n<-dim(psychological)[1]
+## Number of variables in the first set
+p <- length(psychological)
+## Number of variables in the second set
+q <- length(academic)
+```
+```{r}
+p.asym(rho,n,p,q,tstat ="Wilks")
+```
+```{r}
+p.asym(rho,n,p,q, tstat = "Hotelling")
+```
+```{r}
+p.asym(rho,n,p,q,tstat = "Pillai")
+```
+
+```{r}
+p.asym(rho,n,p,q,tstat = "Roy")
+```
+```{r}
+s1 <- diag(sqrt(diag(cov(psychological))))
+s1 %*%
+canoncor1$xcoef
+```
+```{r}
+s2<- diag(sqrt(diag(cov(academic))))
+s2 %*%
+canoncor1$ycoef
+```
+```{r}
+
+```
+
